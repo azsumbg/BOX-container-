@@ -22,7 +22,24 @@ namespace box
 		BOX(size_t max_lenght, T* init_value = nullptr) :max_container_size{ max_lenght }, m_base_ptr{ new T[max_lenght] }
 		{
 			if (init_value)
+			{
 				for (size_t i = 0; i < max_lenght; ++i)*(m_base_ptr + i) = *init_value;
+				push_back_position = max_container_size;
+			}
+		}
+
+		BOX(size_t max_lenght, T init_value) :max_container_size{ max_lenght }, m_base_ptr{ new T[max_lenght] }
+		{
+			for (size_t i = 0; i < max_lenght; ++i)*(m_base_ptr + i) = init_value;
+			push_back_position = max_container_size;
+		}
+
+		BOX(BOX&& other) :m_base_ptr{ other.m_base_ptr }
+		{
+			max_container_size = other->m_base_ptr;
+			push_back_position = other->push_back_position;
+
+			other = nullptr;
 		}
 
 		~BOX()
