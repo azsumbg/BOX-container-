@@ -19,6 +19,13 @@ namespace box
 		size_t push_back_position{ 0 };
 
 	public:
+		
+		BOX()
+		{
+			m_base_ptr = new T[1];
+			max_container_size = 1;
+		}
+		
 		BOX(size_t max_lenght, T* init_value = nullptr) :max_container_size{ max_lenght }, m_base_ptr{ new T[max_lenght] }
 		{
 			if (init_value)
@@ -63,12 +70,11 @@ namespace box
 			else return BOX_Ok;
 		}
 
-		T back() const
+		size_t back() const
 		{
-			if (push_back_position > 0)
-				return *(m_base_ptr + push_back_position - 1);
+			if (push_back_position > 0) return push_back_position - 1;
 
-			return *m_base_ptr;
+			return 0;
 		}
 		unsigned char  init(T* element)
 		{
