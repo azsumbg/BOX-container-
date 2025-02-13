@@ -22,7 +22,7 @@ namespace box
 		
 		BOX()
 		{
-			m_base_ptr = new T[1];
+			m_base_ptr = new T[1]{};
 			max_container_size = 1;
 		}
 		
@@ -70,12 +70,41 @@ namespace box
 			else return BOX_Ok;
 		}
 
-		size_t back() const
+		size_t last_pos() const
 		{
 			if (push_back_position > 0) return push_back_position - 1;
 
 			return 0;
 		}
+		
+		unsigned char resize(size_t new_size)
+		{
+			if (!m_base_ptr)return BOX_invalid_base;
+
+			if (new_size == max_container_size)return BOX_invalid_index;
+			else if (new_size < max_container_size)
+			{
+				T* temp_ptr = new T [new_size];
+				for (size_t ind = 0; ind < new_size; ++ind)*(temp_ptr + ind) = *(m_base_ptr + ind);
+				delete[] m_base_ptr;
+				m_base_ptr = temp_ptr;
+				max_container_size = new_size;
+				if (push_back_position > max_container_size)push_back_position = max_container_size;
+				return BOX_Ok;
+			}
+			else
+			{
+				T* temp_ptr = new T[new_size];
+				for (size_t ind = 0; ind < max_container_size; ++ind)*(temp_ptr + ind) = *(m_base_ptr + ind);
+				delete[] m_base_ptr;
+				m_base_ptr = temp_ptr;
+				max_container_size = new_size;
+				return BOX_Ok;
+			}
+
+			return BOX_not_valid;
+		}
+		
 		unsigned char  init(T* element)
 		{
 			if (m_base_ptr && element)
@@ -92,6 +121,21 @@ namespace box
 
 			return BOX_invalid_base;
 		}
+		unsigned char  init(T element)
+		{
+			if (m_base_ptr)
+			{
+				if (max_container_size > 1)
+					for (size_t ind = 0; ind < max_container_size; ++ind)
+						*(m_base_ptr + ind) = element;
+				else *m_base_ptr = element;
+
+				return BOX_Ok;
+			}
+
+			return BOX_invalid_base;
+		}
+
 
 		unsigned char push_back(T* element)
 		{
