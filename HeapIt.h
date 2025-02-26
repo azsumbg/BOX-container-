@@ -159,6 +159,7 @@ namespace cont
 				return temp;
 			}
 
+			last_error = CONT_Ok;
 			return mBasePtr[index];
 		}
 
