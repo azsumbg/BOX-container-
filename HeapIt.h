@@ -25,7 +25,7 @@ namespace cont
 		{
 			mBasePtr = reinterpret_cast<T*>(calloc(size, sizeof(T)));
 		}
-		CONTAINER(T&& other)
+		CONTAINER(size_t size, T&& other)
 		{
 			if (mBasePtr != other.mBasePtr)
 			{
@@ -144,7 +144,7 @@ namespace cont
 			return last_error;
 		}
 
-		T operator[] (size_t index)
+		T& operator[] (size_t index)
 		{
 			T temp{};
 
